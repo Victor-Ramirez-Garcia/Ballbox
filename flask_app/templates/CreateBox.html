@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <br> <br>
+        <form action="/logout">
+            <button type="submit">Logout</a>
+        </form>
+    </div>
+
+    <div id="create_ballbox">
+        <h1>Create Box</h1>
+        <form action="/add/new" method="POST">
+            <label for="BallBox Title">BallBox Title:</label>
+            <input type="text" name="title" required><br>
+
+            <div style="background-color: red; width: 340px;">
+                <h2>Box:</h2>
+                {% with messages = get_flashed_messages(category_filter=['box_error']) %}    <!-- declare a variable called messages -->
+                    {% if messages %}                                                                 <!-- check if there are any messages -->
+                        {% for message in messages %}                                                 <!-- loop through the messages -->
+                            <p>{{message}}</p>                                                        <!-- display each message in a paragraph tag -->
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <label for="Height">Height:</label>
+                <input type="number" name="box_height" value="100" required><br><br>
+                
+                <label for="Width">Width:</label>
+                <input type="number" name="box_width" value="100" required><br><br>
+                
+                <label for="backgroundColor">Background Color:</label>
+                <input type="text" name="box_background_color"><br><br>
+                
+                <label for="Gradient">Gradient:</label>
+                <input type="text" name="box_gradient"><br>
+                **<br>Syntax Ex: <br> linear-gradient(to right, #ff8c7f 21%, #f99185 52%) <br>**
+                <br>
+                
+                <label for="BorderWidth">Border Width:</label>
+                <input type="number" name="box_border_width" value="1" required><br><br>
+                
+                <label for="Radius">Radius:</label>
+                <input type="number" name="box_radius" value="0" required><br><br>
+                
+                <label for="BorderColor">Border Color:</label>
+                <input type="text" name="box_border_color"><br><br>
+            </div>
+            <div style="background-color: blue; width: 340px; position: absolute; top: 200px; left: 360px;">
+                <h2>Ball:</h2>
+                <label for="Amount">Ball Amount:</label>
+                <input type="number" name="ball_amount" value="1" required><br><br>
+                
+                <label for="Size">Size:</label>
+                <input type="number" name="ball_size" value="0" required><br><br>
+                
+                <label for="backgroundColor">Background Color:</label>
+                <input type="text" name="ball_background_color"><br><br>
+                
+                <label for="Gradient">Gradient:</label>
+                <input type="text" name="ball_gradient"><br>
+                **<br>Syntax Ex: <br> linear-gradient(to right, #ff8c7f 21%, #f99185 52%) <br>**
+                <br>
+                
+                <label for="BorderWidth">Border Width:</label>
+                <input type="number" name="ball_border_width" value="1" required><br><br>
+                
+                <label for="BorderColor">Border Color:</label>
+                <input type="text" name="ball_border_color"><br><br>
+            </div>
+            <div style="position: relative; top: 20px">
+                <button type="button" onclick="preview()">Preview</button>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+
+    <script src="../static/preview.js"></script>
+</body>
+</html>

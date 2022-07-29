@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ballbox.css') }}">
+</head>
+<body>
+
+    <div id="login_and_register">
+        <div class="register">
+            <h1>Register</h1>
+            {% with messages = get_flashed_messages(category_filter=['registration_error']) %}    <!-- declare a variable called messages -->
+            {% if messages %}                                                                 <!-- check if there are any messages -->
+                {% for message in messages %}                                                 <!-- loop through the messages -->
+                    <p style="font-size: 20px;">{{message}}</p>                                                        <!-- display each message in a paragraph tag -->
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <form action="/registration" method="POST">
+                <br>
+                <label for="First_Name">First Name:</label><br>
+                <input type="text" name="first_name"><br><br><br>
+                <label for="Last_Name">Last Name:</label><br>
+                <input type="text" name="last_name"><br><br><br>
+                <label for="Email">Email Address:</label><br>
+                <input type="email" name="email"><br><br><br>
+                <label for="Password">Password:</label><br>
+                <input type="password" name="password"><br><br><br>
+                <label for="Confirm_Password">Confirm Password:</label><br>
+                <input type="password" name="confirm_password"><br><br>
+                <input type="submit" value="Register">
+            </form>
+        </div>
+
+        <div class="login">
+            <h1>Login</h1>
+            {% with messages = get_flashed_messages(category_filter=['login_error']) %}    <!-- declare a variable called messages -->
+            {% if messages %}                                                                 <!-- check if there are any messages -->
+                {% for message in messages %}                                                 <!-- loop through the messages -->
+                    <p style="font-size: 20px;">{{message}}</p>                                                        <!-- display each message in a paragraph tag -->
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <form action="/login" method="POST">
+                <br>
+                <label for="Email">Email:</label><br>
+                <input type="email" name="email"><br><br><br>
+                <label for="Password">Password:</label><br>
+                <input type="Password" name="password"><br><br>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='ballbox.js') }}"></script>
+</body>
+</html>

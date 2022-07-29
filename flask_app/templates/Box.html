@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <a href="/dashboard">Dashboard</a><br>
+        <a href="/new">Add BallBox</a>
+        <br>
+        <br>
+
+        <form action="/logout">
+            <button type="submit">Logout</a>
+        </form>
+    </div>
+    <br>
+    <br>
+    <div id="ballbox">
+        <h1>{{ ballbox.title }}</h1>
+        <br>
+        {% for user in ballbox.ballbox_creator %}
+            <p>Added by {{ user.first_name }} {{ user.last_name }}</p>
+        {% endfor %}
+
+        <script>
+            var speed = 2;
+            var vx = speed;
+            var vy = speed;
+
+            function create_box() {
+                var newbox = document.createElement('div');
+                
+                newbox.setAttribute('id', 'box');
+
+                newbox.style.height = {{ ballbox.box_height }} + 'px';
+                newbox.style.width = {{ ballbox.box_width }} + 'px';
+                newbox.style.backgroundColor = '{{ ballbox.box_background_color }}';
+                newbox.style.backgroundImage = '{{ ballbox.box_gradient }}';
+                newbox.style.borderWidth = {{ ballbox.box_border_width }} + 'px';
+                newbox.style.borderStyle = 'solid';
+                newbox.style.borderColor = '{{ ballbox.box_border_color }}';
+                newbox.style.borderRadius = {{ ballbox.box_radius }} + 'px';
+                newbox.style.position = 'absolute';
+                newbox.style.top = 250 + 'px';
+                newbox.style.left = 10 + 'px';
+
+                document.getElementById('ballbox').appendChild(newbox);
+
+                return newbox
+            }
+
+            function randomTop() {
+                return Math.floor(Math.random(0) * (({{ ballbox.box_height }} - {{ ballbox.box_border_width }}) - ({{ ballbox.ball_size }} - {{ ballbox.ball_border_width }} + 50))) + 'px';
+            }
+
+            function randomLeft() {
+                return Math.floor(Math.random(0) * (({{ ballbox.box_width }} - {{ ballbox.box_border_width }}) - ({{ ballbox.ball_size }} - {{ ballbox.ball_border_width }} + 50))) + 'px';
+            }
+
+            function create_ball(num) {
+                var amount = [];
+
+                if (num <= 0 || isNaN(num)) {
+                    num = 1;
+                }
+                
+                for (var i = 0; i < num; i++) {
+
+                    var newball = document.createElement('div');
+                    newball.setAttribute('id', 'ball');
+
+                    newball.style.height = {{ ballbox.ball_size }} + 'px';
+                    newball.style.width = {{ ballbox.ball_size }} + 'px';
+                    newball.style.backgroundColor = '{{ ballbox.ball_background_color }}';
+                    newball.style.backgroundImage = '{{ ballbox.ball_gradient }}';
+                    newball.style.borderWidth = {{ ballbox.ball_border_width }} + 'px';
+                    newball.style.borderStyle = 'solid';
+                    newball.style.borderColor = '{{ ballbox.ball_border_color }}';
+                    newball.style.borderRadius = 50 + 'px';
+                    newball.style.position = 'absolute';
+                    newball.style.top = randomTop();
+                    newball.style.left = randomLeft();
+                    
+                    document.getElementById('box').appendChild(newball);
+                    amount.push([newball, vx, vy, speed]);
+                }
+
+                console.log(amount);
+
+                return amount
+            }
+
+            function not_a_number(number) {
+                if (isNaN(number)) {
+                    number = 0;
+                }
+
+                return number
+            }
+
+            function moveBall() {
+                var box_height = parseInt(new_box.style.height);
+                var box_width = parseInt(new_box.style.width);
+                var box_border_width = parseInt(new_box.style.borderWidth);
+                
+                box_height = not_a_number(box_height);
+                box_width = not_a_number(box_width);
+                box_border_width = not_a_number(box_border_width);
+
+
+                for (var i = 0; i < new_ball.length; i++) {
+                    var ball_size = parseInt(new_ball[i][0].style.height);
+                    var ball_border_width = parseInt(new_ball[i][0].style.borderWidth);
+                    var ball_left = parseInt(new_ball[i][0].style.left);
+                    var ball_top = parseInt(new_ball[i][0].style.top);
+
+                    ball_size = not_a_number(ball_size);
+                    ball_border_width = not_a_number(ball_border_width);
+
+                    ball_left += new_ball[i][1];
+                    ball_top += new_ball[i][2];
+                    
+                    new_ball[i][0].style.top = ball_top + 'px';
+                    new_ball[i][0].style.left = ball_left + 'px';
+                    
+                    
+                    if (ball_left > (box_width - ball_border_width - box_border_width) - ball_size) {
+                        new_ball[i][1] = -new_ball[i][1];
+                    }
+
+                    if (ball_left < 0) {
+                        new_ball[i][1] = new_ball[i][3];
+                    }
+
+                    if (ball_top > (box_height - ball_border_width - box_border_width) - ball_size) {
+                        new_ball[i][2] = -new_ball[i][2];
+                    }
+
+                    if (ball_top < 0) {
+                        new_ball[i][2] = new_ball[i][3];
+                    }
+                }
+
+                requestAnimationFrame(moveBall);
+            }
+
+            var buttonClicked = false;
+            function display_ballbox() {
+                var box = document.getElementById('box');
+                var ball = document.getElementById('ball');
+
+                if (buttonClicked == true) {
+                    box.remove();
+                    ball.remove();
+                    buttonClicked = false;
+                    new_box = create_box();
+                    new_ball = create_ball({{ ballbox.ball_amount }});
+                    buttonClicked = true;
+                } else {
+                    buttonClicked = true;
+                    new_box = create_box();
+                    new_ball = create_ball({{ ballbox.ball_amount }});
+                    moveBall();
+                }
+            }
+
+            display_ballbox();
+        </script>
+    </div>
+</body>
+</html>
